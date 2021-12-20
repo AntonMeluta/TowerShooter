@@ -13,11 +13,11 @@ TagManager:
   - UI
   - 
   - 
-  - Clickable
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - Bullet
+  - Player
+  - LocationClickable
+  - Tower
   - 
   - 
   - 

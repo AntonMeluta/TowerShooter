@@ -28,7 +28,7 @@ public class TapUiControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
         while (true)
         {
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, layersClickable))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 1000, layersClickable))
             {
                 EventsBroker.TapEvent(hit.point);
             }
