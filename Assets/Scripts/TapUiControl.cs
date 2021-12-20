@@ -3,43 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TapUiControl : MonoBehaviour, IDragHandler, IPointerDownHandler, 
-    IPointerUpHandler
+public class TapUiControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public PlayerMovement playerMovement; //событие вызывать
     public IkArmControl ikArmControl; //событие вызывать
 
-    public LayerMask layersClickable;
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, layersClickable))
-        {
-            playerMovement.GoTargetMoving(hit.point);
-        }
-
-        // Таргетирование для стрельбы, вызов событий
-        ikArmControl.TryShootingOn();
-        ikArmControl.CubeCostil(hit.point);     //событие передвижения цели кинематик-анимации руки
-        //Вызов события для стрельбы
-    }
+    [SerializeField]
+    private LayerMask layersClickable;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, layersClickable))
-        {
-            playerMovement.GoTargetMoving(hit.point);
-        }
-
-        ikArmControl.TryShootingOn();
-        ikArmControl.CubeCostil(hit.point);
+        EventsBroker.TapUpdateStateEvent(true);
+        StartCoroutine(TapPressed());
     }
-
+    
     public void OnPointerUp(PointerEventData eventData)
     {
-        // Таргетирование для стрельбы, вызов события
-        ikArmControl.TryShootingOff();
+        EventsBroker.TapUpdateStateEvent(false);
+        StopAllCoroutines();        
     }
+
+    private IEnumerator TapPressed()
+    {
+        while (true)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, layersClickable))
+            {
+                EventsBroker.TapEvent(hit.point);
+            }
+            yield return null;
+        }
+    }
+    
 }

@@ -10,23 +10,30 @@ public class IkArmControl : MonoBehaviour
     public Transform rightHandObj = null;
     public Transform lookObj = null;
 
+    private void OnEnable()
+    {
+        EventsBroker.OnTap += ArmIkAnimControl;
+        EventsBroker.OnTapUpdateState += UpdateTapState;
+    }
+
+    private void OnDisable()
+    {
+        EventsBroker.OnTap -= ArmIkAnimControl;
+        EventsBroker.OnTapUpdateState -= UpdateTapState;
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    //Реакция на событие
-    public void TryShootingOn()
+    //Реакция на тап по экрану
+    private void UpdateTapState(bool isTap)
     {
-        ikActive = true;
+        ikActive = isTap;
     }
-
-    public void TryShootingOff()
-    {
-        ikActive = false;
-    }
-
-    public void CubeCostil(Vector3 newPosCube)
+    
+    private void ArmIkAnimControl(Vector3 newPosCube)
     {
         rightHandObj.transform.position = newPosCube;
     }

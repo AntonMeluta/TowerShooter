@@ -14,18 +14,25 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    public void GoTargetMoving(Vector3 destination)
+    private void OnEnable()
     {
-        //meshAgent.destination = destination;
+        EventsBroker.OnTap += GoTargetMoving;
+    }
+
+    private void OnDisable()
+    {
+        EventsBroker.OnTap -= GoTargetMoving;
+        animator.SetFloat("speedMove", 0);
     }
 
     private void Update()
     {
-
         animator.SetFloat("speedMove", meshAgent.velocity.magnitude);
-        if (Input.GetKeyDown(KeyCode.E))
-            animator.SetBool("isWalk", true);
-        if (Input.GetKeyUp(KeyCode.E))
-            animator.SetBool("isWalk", false);
     }
+
+    private void GoTargetMoving(Vector3 destination)
+    {
+        meshAgent.destination = destination;
+    }
+    
 }
