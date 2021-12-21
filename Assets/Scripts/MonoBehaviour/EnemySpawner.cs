@@ -4,63 +4,103 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    private List<Transform> dynamicMassivPointSpawns;
+    private float intervalCurrent;
+    private int countSpawnEnemyCurrent;
+    private int counterKills;  
+    private int countWave;
 
+    [SerializeField]
+    private int countSpawnAverage = 4;
+    [SerializeField]
+    private GameSettings gameSettings;
     [SerializeField]
     private PoolObject poolEnemies;
     [SerializeField]
-    private float intervalSpawn = 3;
+    private float intervalSpawnAverage = 3;
     [SerializeField]
     private Transform[] allTransformsSpawn;
 
     private void OnEnable()
     {
         EventsBroker.OnPlayerToWar += StartingSpawnProcess;
-        FillListPointsSpawn();
+        EventsBroker.OnPlayerKill += CheckNextWave;
     }
 
     private void OnDisable()
     {
         EventsBroker.OnPlayerToWar -= StartingSpawnProcess;
+        EventsBroker.OnPlayerKill -= CheckNextWave;
     }
 
-    private void FillListPointsSpawn()
+    private void Start()
     {
-        dynamicMassivPointSpawns = new List<Transform>();
-        for (int i = 0; i < allTransformsSpawn.Length; i++)        
-            dynamicMassivPointSpawns.Add(allTransformsSpawn[i]);        
+        counterKills = 0;
+        countWave = 1;
+        SetIntervalSpawn();
+        SetCountSpawn();
     }
 
-    private Transform GetPointSpawn()
+    private void SetCountSpawn()
     {
-        if (dynamicMassivPointSpawns.Count < 1)
-            FillListPointsSpawn();
-
-        int randomIndex = Random.Range(0, dynamicMassivPointSpawns.Count);
-        Transform pointSpawn = dynamicMassivPointSpawns[randomIndex];
-        dynamicMassivPointSpawns.RemoveAt(randomIndex);
-        return pointSpawn;
+        switch (gameSettings.DifficultyGame)
+        {
+            case DifficultyGame.easy:
+                countSpawnEnemyCurrent = countSpawnAverage - 2;
+                break;
+            case DifficultyGame.middle:
+                countSpawnEnemyCurrent = countSpawnAverage;
+                break;
+            case DifficultyGame.hard:
+                countSpawnEnemyCurrent = countSpawnAverage + 2;
+                break;
+            default:
+                break;
+        }
     }
 
+    private void CheckNextWave()
+    {
+        counterKills++;
+        if (counterKills >= countSpawnEnemyCurrent)
+        {
+            counterKills = 0;
+            countWave++;
+            Invoke("NewWaveWithDelay", 2.1f);     
+        }
+    }
+
+    private void NewWaveWithDelay()
+    {
+        StartingSpawnProcess();
+    }
+
+    private void SetIntervalSpawn()
+    {
+        switch (gameSettings.DifficultyGame)
+        {
+            case DifficultyGame.easy:
+                intervalCurrent = intervalSpawnAverage + 1;
+                break;
+            case DifficultyGame.middle:
+                intervalCurrent = intervalSpawnAverage;
+                break;
+            case DifficultyGame.hard:
+                intervalCurrent = intervalSpawnAverage - 1;
+                break;
+            default:
+                break;
+        }
+    }
+    
     private void StartingSpawnProcess()
     {
-        StartCoroutine(Spawner());
-    }
+        EventsBroker.NewWaveEvent(countWave);
 
-    private IEnumerator Spawner()
-    {
-        while (true)
+        for (int i = 0; i < countSpawnEnemyCurrent; i++)
         {
-            yield return new WaitForSeconds(intervalSpawn);
-
-            Vector3 pointSpawn = GetPointSpawn().position;
-            GameObject enemy = poolEnemies.GetPooledObject();            
-            enemy.transform.position = pointSpawn;
+            GameObject enemy = poolEnemies.GetPooledObject();
+            enemy.transform.position = allTransformsSpawn[i].position;
             enemy.SetActive(true);
-            //enemy.transform.rotation = Quaternion.Euler(0, 90, 0);
-            /*bullet.GetComponent<BulletControl>().SetTaret(transform.position, vectorMove,
-                attributes.BulletProperties.ForceShoot, attributes.BulletProperties.LiftShoot);
-            bullet.SetActive(true);*/
         }
     }
 

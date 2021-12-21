@@ -14,11 +14,11 @@ TagManager:
   - 
   - 
   - Enemy
-  - Bullet
+  - BulletPlayer
   - Player
   - LocationClickable
   - Tower
-  - 
+  - BulletEnemy
   - 
   - 
   - 

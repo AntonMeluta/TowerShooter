@@ -29,6 +29,29 @@ public class EventsBroker
     }
     #endregion
 
+    #region событие - игрока терпит поражение
+    public static Action OnPlayerLost;
+    public static void PlayerFail()
+    {
+        OnPlayerLost?.Invoke();
+    }
+    #endregion
 
+    #region событие - игрок убивает врага
+    public static Action OnPlayerKill;
+    public static void PlayerKill()
+    {
+        OnPlayerKill?.Invoke();
+    }
+    #endregion
+
+    #region событие - новая волна врагов, обновление UI
+    public delegate void NewWaveHandler(int countWave);
+    public static event NewWaveHandler OnWave;
+    public static void NewWaveEvent(int waveValue)
+    {
+        OnWave?.Invoke(waveValue);
+    }
+    #endregion
 
 }

@@ -9,9 +9,7 @@ public class ShootControl : MonoBehaviour
     private bool isPermission;
 
     [SerializeField]
-    private PoolObject poolBullets;
-    [SerializeField]
-    private GameObject prefabBullet;
+    private PoolObject poolBullets;    
     [SerializeField]
     private float speedShooting;
     [SerializeField]
@@ -39,7 +37,6 @@ public class ShootControl : MonoBehaviour
     {
         if (isPermission)
         {
-            print("ShootingProcess(Vector3 vectorMove)");
             GameObject bullet = poolBullets.GetPooledObject();
             bullet.transform.position = handPos.position + transform.forward / 3;
             bullet.GetComponent<BulletControl>().SetTaret(transform.position, vectorMove,
@@ -53,7 +50,6 @@ public class ShootControl : MonoBehaviour
     {
         float delta = 1 - speedShooting;
         isPermission = false;
-        print("ShootingProcess(Vector3 vectorMove) 2");
 
         while (delta > 0)
         {

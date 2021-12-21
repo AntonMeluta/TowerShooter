@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerControl : MonoBehaviour, IPerson
+public class PlayerControl : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private IkArmControl ikArmControl;

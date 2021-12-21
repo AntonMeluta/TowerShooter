@@ -258,8 +258,8 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1591958284478493450}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -1922,8 +1922,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6442d046632acb4bbea21dfc74f1107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolBullets: {fileID: 0}
-  prefabBullet: {fileID: 7413745526109413638, guid: db73cd04bb775d941a010efa5ca8e809,
+  delayBetweenShootAverage: 2
+  shotAccuracyAverage: 2
+  gameSettings: {fileID: 11400000, guid: da04dee489a1a0841ab48a360b9e55b2, type: 2}
+  prefabBullet: {fileID: 7413745526109413638, guid: ac2f7d01ff37ee84ebf54b619a650188,
     type: 3}
   handPos: {fileID: 1591958285393862747}
 --- !u!114 &1591958286016076698

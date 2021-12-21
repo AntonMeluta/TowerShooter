@@ -17,6 +17,7 @@ public class DestructedRagdoll : MonoBehaviour, IDestructible
 
         ragdoll.ApplyForce(vectorFromDestroyer * getForce);
 
+        EventsBroker.PlayerKill();
         gameObject.SetActive(false);  
     }
 }

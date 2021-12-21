@@ -1,19 +1,33 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneController : Singleton<SceneController>
+public class SceneController : MonoBehaviour
 {
+    private void OnEnable()
+    {
+        EventsBroker.OnPlayerLost += ToPause;
+    }
+
+    private void OnDisable()
+    {
+        EventsBroker.OnPlayerLost -= ToPause;
+    }
+
     private GameState currentState = GameState.game;
     public enum GameState
     {
         pause,
         game,
-        loss
     }
 
     private void Start()
     {
         UpdateGameState(GameState.game);
+    }
+
+    private void ToPause()
+    {
+        UpdateGameState(GameState.pause);
     }
 
     //Глобальная точка входа для работы с изменением состояния игры
@@ -30,18 +44,9 @@ public class SceneController : Singleton<SceneController>
             case GameState.game:
                 Time.timeScale = 1;
                 break;
-            case GameState.loss:
-                Time.timeScale = 0;
-                break;
             default:
                 break;
         }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-            RestartGame();
     }
 
     public void RestartGame()

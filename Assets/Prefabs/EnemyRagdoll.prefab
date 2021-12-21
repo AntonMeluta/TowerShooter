@@ -238,8 +238,8 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 763522023775329130}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -2560,7 +2560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdollSpine: {fileID: 4915385379115055390}
-  timeToLive: 5
+  timeToLive: 2
 --- !u!1 &7997107300361078799
 GameObject:
   m_ObjectHideFlags: 0
