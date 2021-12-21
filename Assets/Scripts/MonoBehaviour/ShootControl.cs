@@ -6,8 +6,10 @@ public class ShootControl : MonoBehaviour
 {
     private float delayBetweenShoots;
     private float delta = 0;
-    private bool isPermission = true;
+    private bool isPermission;
 
+    [SerializeField]
+    private PoolObject poolBullets;
     [SerializeField]
     private GameObject prefabBullet;
     [SerializeField]
@@ -19,8 +21,8 @@ public class ShootControl : MonoBehaviour
 
     private void OnEnable()
     {
+        isPermission = true;
         EventsBroker.OnTap += ShootingProcess;
-        StartCoroutine(ShootingSpeedController());
     }
 
     private void OnDisable()
@@ -37,11 +39,12 @@ public class ShootControl : MonoBehaviour
     {
         if (isPermission)
         {
-            GameObject bullet = Instantiate(prefabBullet, handPos.position
-            + transform.forward / 3, Quaternion.identity);
+            print("ShootingProcess(Vector3 vectorMove)");
+            GameObject bullet = poolBullets.GetPooledObject();
+            bullet.transform.position = handPos.position + transform.forward / 3;
             bullet.GetComponent<BulletControl>().SetTaret(transform.position, vectorMove,
                 attributes.BulletProperties.ForceShoot, attributes.BulletProperties.LiftShoot);
-            isPermission = false;
+            bullet.SetActive(true);            
             StartCoroutine(ShootingSpeedController());
         }        
     }
@@ -49,11 +52,15 @@ public class ShootControl : MonoBehaviour
     private IEnumerator ShootingSpeedController()
     {
         float delta = 1 - speedShooting;
+        isPermission = false;
+        print("ShootingProcess(Vector3 vectorMove) 2");
+
         while (delta > 0)
         {
             delta -= Time.deltaTime;
             yield return null;
         }
+
         isPermission = true;
     }
 }

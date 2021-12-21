@@ -9,10 +9,21 @@ public class BulletControl : MonoBehaviour
     private float force;
     private float lift;
     private Vector3 shooterPos;
+    private float timingLive = 6;
 
     private void Awake()
     {
         body = GetComponent<Rigidbody>();
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(LiveCycle());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     public void SetTaret(Vector3 shooter, Vector3 target, float getForce, float getLift)
@@ -28,11 +39,24 @@ public class BulletControl : MonoBehaviour
         if (collision.gameObject.GetComponent(typeof(IDestructible)))
             collision.gameObject.GetComponent<IDestructible>().
                 OnDestruction(shooterPos, force, lift);
+
+        DestroySelf();
     }
 
     private void FixedUpdate()
     {
         body.velocity = direction;
         transform.LookAt(direction);
+    }
+
+    private IEnumerator LiveCycle()
+    {
+        yield return new WaitForSeconds(timingLive);
+        DestroySelf();
+    }
+
+    private void DestroySelf()
+    {
+        gameObject.SetActive(false);
     }
 }

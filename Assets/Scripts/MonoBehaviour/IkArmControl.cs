@@ -27,7 +27,6 @@ public class IkArmControl : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    //Реакция на тап по экрану
     private void UpdateTapState(bool isTap)
     {
         ikActive = isTap;

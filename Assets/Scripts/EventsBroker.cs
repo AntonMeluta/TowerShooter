@@ -2,9 +2,7 @@
 using UnityEngine;
 
 public class EventsBroker
-{
-    //public class EventGameState : UnityEvent<GameManager.GameState, GameManager.GameState> {}
-        
+{        
     #region Отлавливание события тапа по экрану
     public delegate void TapHandler(Vector3 tapVector);
     public static event TapHandler OnTap;
@@ -22,7 +20,15 @@ public class EventsBroker
         OnTapUpdateState?.Invoke(isTapNow);
     }
     #endregion
-    
+
+    #region событие - игрок переходит в состояние боя
+    public static Action OnPlayerToWar;
+    public static void PlayerStartedFight()
+    {
+        OnPlayerToWar?.Invoke();
+    }
+    #endregion
+
 
 
 }

@@ -7,11 +7,17 @@ public class EnemyControl : MonoBehaviour, IPerson
     private ArmAnimIkEnemy armAnimIkEnemy;
     private float delayShoot = 3;
     private Transform playerPos;
-    
+    private PoolObject poolBullets;
+
     [SerializeField]
     private GameObject prefabBullet;
     [SerializeField]
     private Transform handPos;
+
+    private void Awake()
+    {
+        poolBullets = GameObject.Find("BulletPool").GetComponent<PoolObject>();
+    }
 
     private void OnEnable()
     {
@@ -32,14 +38,16 @@ public class EnemyControl : MonoBehaviour, IPerson
 
     private IEnumerator ShootToPlayer()
     {
+        yield return new WaitForSeconds(Random.Range(0.2f, 1.5f));
         while (true)
         {
-            GameObject bullet = Instantiate(prefabBullet, handPos.position 
-                + transform.forward, Quaternion.identity);
+            GameObject bullet = poolBullets.GetPooledObject();
+            bullet.transform.position = handPos.position + transform.forward;
             float randomLagTaget = Random.Range(-3, 3);
-            Vector3 targetForBullet = playerPos.position + new Vector3(randomLagTaget, 0, 0);
+            Vector3 targetForBullet = playerPos.position + new Vector3(randomLagTaget, 1.3f, 0);
             bullet.GetComponent<BulletControl>().
                 SetTaret(transform.position, targetForBullet, 1, 1);
+            bullet.SetActive(true);
 
             yield return new WaitForSeconds(delayShoot);
         }

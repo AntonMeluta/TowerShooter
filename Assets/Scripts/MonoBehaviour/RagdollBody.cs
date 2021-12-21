@@ -16,7 +16,6 @@ public class RagdollBody : MonoBehaviour
 
     public void ApplyForce(Vector3 force)
     {
-        print("force = " + force);
         ragdollSpine.AddForce(force);
     }
 }

@@ -38,7 +38,8 @@ public class PlayerControl : MonoBehaviour, IPerson
     {
         shootControl.enabled = true;
         playerMovement.enabled = false;
-        ikArmControl.enabled = true;        
+        ikArmControl.enabled = true;
+        EventsBroker.PlayerStartedFight();
     }
 
     
